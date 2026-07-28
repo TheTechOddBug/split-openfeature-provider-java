@@ -94,14 +94,14 @@ pipeline:
                       PR_BASE_BRANCH: <+trigger.targetBranch>
                     command: |-
                       if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" != "null" ]; then
-                        mvn --batch-mode sonar:sonar \
+                        mvn --batch-mode org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
                           -Dsonar.host.url="$SONAR_HOST_URL" \
                           -Dsonar.token="$SONAR_TOKEN" \
                           -Dsonar.pullrequest.key="$PR_NUMBER" \
                           -Dsonar.pullrequest.branch="$PR_BRANCH" \
                           -Dsonar.pullrequest.base="$PR_BASE_BRANCH"
                       else
-                        mvn --batch-mode sonar:sonar \
+                        mvn --batch-mode org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
                           -Dsonar.host.url="$SONAR_HOST_URL" \
                           -Dsonar.token="$SONAR_TOKEN"
                       fi
