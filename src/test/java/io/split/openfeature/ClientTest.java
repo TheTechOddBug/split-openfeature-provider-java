@@ -275,7 +275,7 @@ public class ClientTest {
   @Test
   public void destroySplitClientTest() {
     assertEquals("32", splitClient.getTreatment("key","int_feature"));
-    openFeatureAPI.shutdown();
+    splitClient.destroy();
     assertEquals("control", splitClient.getTreatment("key","int_feature"));
   }
 
