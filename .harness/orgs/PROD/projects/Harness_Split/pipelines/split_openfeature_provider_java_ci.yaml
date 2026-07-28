@@ -39,7 +39,7 @@ pipeline:
                         image: maven:3.9-eclipse-temurin-11
                         shell: Bash
                         envVariables:
-                          MAVEN_OPTS: "-Xms2g -Xmx2g -XX:+PrintCommandLineFlags -XX:ThreadStackSize=1024 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
+                          MAVEN_OPTS: "-Xmx2g -XX:+PrintCommandLineFlags -XX:ThreadStackSize=1024 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
                         command: mvn --batch-mode -T 2C clean test
                         reports:
                           type: JUnit
@@ -55,7 +55,7 @@ pipeline:
                         image: maven:3.9-eclipse-temurin-17
                         shell: Bash
                         envVariables:
-                          MAVEN_OPTS: "-Xms2g -Xmx2g -XX:+PrintCommandLineFlags -XX:ThreadStackSize=1024 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
+                          MAVEN_OPTS: "-Xmx2g -XX:+PrintCommandLineFlags -XX:ThreadStackSize=1024 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
                         command: mvn --batch-mode -T 2C clean test
                         reports:
                           type: JUnit
@@ -71,7 +71,7 @@ pipeline:
                         image: maven:3.9-eclipse-temurin-21
                         shell: Bash
                         envVariables:
-                          MAVEN_OPTS: "-Xms2g -Xmx2g -XX:+PrintCommandLineFlags -XX:ThreadStackSize=1024 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
+                          MAVEN_OPTS: "-Xmx2g -XX:+PrintCommandLineFlags -XX:ThreadStackSize=1024 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
                         command: mvn --batch-mode -T 2C clean test
                         reports:
                           type: JUnit
