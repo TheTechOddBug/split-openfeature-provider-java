@@ -40,7 +40,7 @@ pipeline:
                         shell: Bash
                         envVariables:
                           MAVEN_OPTS: "-Xms2g -Xmx2g -XX:+PrintCommandLineFlags -XX:ThreadStackSize=1024 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
-                        command: mvn --batch-mode -T 2C clean package
+                        command: mvn --batch-mode -T 2C clean test
                         reports:
                           type: JUnit
                           spec:
@@ -56,7 +56,7 @@ pipeline:
                         shell: Bash
                         envVariables:
                           MAVEN_OPTS: "-Xms2g -Xmx2g -XX:+PrintCommandLineFlags -XX:ThreadStackSize=1024 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
-                        command: mvn --batch-mode -T 2C clean package
+                        command: mvn --batch-mode -T 2C clean test
                         reports:
                           type: JUnit
                           spec:
@@ -72,7 +72,7 @@ pipeline:
                         shell: Bash
                         envVariables:
                           MAVEN_OPTS: "-Xms2g -Xmx2g -XX:+PrintCommandLineFlags -XX:ThreadStackSize=1024 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
-                        command: mvn --batch-mode -T 2C clean package
+                        command: mvn --batch-mode -T 2C clean test
                         reports:
                           type: JUnit
                           spec:
