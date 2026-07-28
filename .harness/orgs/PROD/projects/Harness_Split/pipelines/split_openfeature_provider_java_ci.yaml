@@ -1,0 +1,109 @@
+pipeline:
+  name: split-openfeature-provider-java-ci
+  identifier: split_openfeature_provider_java_ci
+  projectIdentifier: Harness_Split
+  orgIdentifier: PROD
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: fmegithubrunnersci
+        repoName: split-openfeature-provider-java
+        build: <+input>
+        depth: 0
+  stages:
+    - stage:
+        name: test
+        identifier: test
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - parallel:
+                  - step:
+                      type: Run
+                      name: test jdk11
+                      identifier: test_jdk11
+                      spec:
+                        connectorRef: dockerhub
+                        image: maven:3.9-eclipse-temurin-11
+                        shell: Bash
+                        envVariables:
+                          MAVEN_OPTS: "-Xmx2g -XX:+PrintCommandLineFlags -XX:ThreadStackSize=1024 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
+                        command: mvn --batch-mode -T 2C clean test
+                        reports:
+                          type: JUnit
+                          spec:
+                            paths:
+                              - "**/target/surefire-reports/*.xml"
+                  - step:
+                      type: Run
+                      name: test jdk17
+                      identifier: test_jdk17
+                      spec:
+                        connectorRef: dockerhub
+                        image: maven:3.9-eclipse-temurin-17
+                        shell: Bash
+                        envVariables:
+                          MAVEN_OPTS: "-Xmx2g -XX:+PrintCommandLineFlags -XX:ThreadStackSize=1024 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
+                        command: mvn --batch-mode -T 2C clean test
+                        reports:
+                          type: JUnit
+                          spec:
+                            paths:
+                              - "**/target/surefire-reports/*.xml"
+                  - step:
+                      type: Run
+                      name: test jdk21
+                      identifier: test_jdk21
+                      spec:
+                        connectorRef: dockerhub
+                        image: maven:3.9-eclipse-temurin-21
+                        shell: Bash
+                        envVariables:
+                          MAVEN_OPTS: "-Xmx2g -XX:+PrintCommandLineFlags -XX:ThreadStackSize=1024 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
+                        command: mvn --batch-mode -T 2C clean test
+                        reports:
+                          type: JUnit
+                          spec:
+                            paths:
+                              - "**/target/surefire-reports/*.xml"
+              - step:
+                  type: Run
+                  name: sonar analysis
+                  identifier: sonar_analysis
+                  spec:
+                    connectorRef: dockerhub
+                    image: maven:3.9-eclipse-temurin-17
+                    shell: Bash
+                    envVariables:
+                      SONAR_HOST_URL: https://sonar.harness.io
+                      SONAR_TOKEN: <+secrets.getValue("sonarqube-token")>
+                      PR_NUMBER: <+trigger.prNumber>
+                      PR_BRANCH: <+trigger.sourceBranch>
+                      PR_BASE_BRANCH: <+trigger.targetBranch>
+                    command: |-
+                      if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" != "null" ]; then
+                        mvn --batch-mode org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+                          -Dsonar.host.url="$SONAR_HOST_URL" \
+                          -Dsonar.token="$SONAR_TOKEN" \
+                          -Dsonar.pullrequest.key="$PR_NUMBER" \
+                          -Dsonar.pullrequest.branch="$PR_BRANCH" \
+                          -Dsonar.pullrequest.base="$PR_BASE_BRANCH"
+                      else
+                        mvn --batch-mode org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+                          -Dsonar.host.url="$SONAR_HOST_URL" \
+                          -Dsonar.token="$SONAR_TOKEN"
+                      fi
+                  when:
+                    stageStatus: Success
